@@ -264,11 +264,74 @@ text = "\n".join(pytesseract.image_to_string(p, lang='pol') for p in pages)
 
 ## Instalacja w Claude.ai
 
-### Wymagania
+Są **dwa sposoby** instalacji skills — przez panel **customizacji konta** (globalne, działają w każdej konwersacji) lub przez **ustawienia projektu** (tylko w wybranym projekcie).
+
+---
+
+### Sposób 1 — Customizacja konta (zalecany)
+
+Skills zainstalowane tą metodą są dostępne **we wszystkich konwersacjach** na Twoim koncie Claude.ai — nie musisz tworzyć projektu.
+
+#### Wymagania
+- Konto Claude.ai (Free, Pro lub Team)
+
+#### Kroki instalacji
+
+1. **Otwórz panel customizacji skills** w przeglądarce:
+   ```
+   https://claude.ai/customize/skills
+   ```
+   Alternatywnie: kliknij swój awatar (prawy górny róg) → **Ustawienia** → **Skills** (lub **Umiejętności**)
+
+2. **Dodaj skill główny** (wymagany jako pierwszy):
+   ```
+   Kliknij  "Dodaj umiejętność"  →  "Wgraj plik .skill"
+   → Wybierz: enterprise-plugin/skills/ai-polish-text-expert/ai-polish-text-expert.skill
+   → Potwierdź
+   ```
+
+3. **Dodaj pozostałe skills** w ten sam sposób (kolejność dowolna):
+
+   | Plik do wgrania | Skill |
+   |-----------------|-------|
+   | `skills/analiza-tresci/analiza-tresci.skill` | Analiza treści |
+   | `skills/porownanie-tresci/porownanie-tresci.skill` | Porównanie dokumentów |
+   | `skills/popraw-tresc/popraw-tresc.skill` | Poprawa i refaktoryzacja tekstu |
+
+4. **Upewnij się, że skills są aktywne** — każdy powinien mieć przełącznik w pozycji **włączony** (zielony)
+
+5. **Weryfikacja** — otwórz **nową konwersację** i wpisz:
+   ```
+   /analiza-tresci
+   ```
+   Agent powinien odpowiedzieć prośbą o dostarczenie pliku/treści.
+
+#### Zarządzanie skills
+
+| Akcja | Jak |
+|-------|-----|
+| Wyłącz skill (tymczasowo) | Przełącznik → wyłączony na stronie [customize/skills](https://claude.ai/customize/skills) |
+| Usuń skill | Kliknij ikonę kosza obok skill'a |
+| Zaktualizuj skill | Usuń starą wersję → wgraj nowy plik `.skill` |
+| Sprawdź zainstalowane | Otwórz [claude.ai/customize/skills](https://claude.ai/customize/skills) |
+
+#### Uwagi (customizacja konta)
+
+- Skills z customizacji działają **globalnie** — w każdej nowej konwersacji, bez potrzeby tworzenia projektu
+- Możesz mieć jednocześnie skills globalne (customizacja) i projektowe (sposób 2)
+- Przy konflikcie nazw komend — skill projektowy ma wyższy priorytet
+
+---
+
+### Sposób 2 — W ustawieniach projektu (opcjonalny)
+
+Jeśli chcesz ograniczyć skills do konkretnego projektu:
+
+#### Wymagania
 - Konto Claude.ai z dostępem do **projektów**
 - Uprawnienia do dodawania skills w projekcie
 
-### Kroki instalacji
+#### Kroki instalacji
 
 1. **Utwórz projekt** (lub otwórz istniejący) w Claude.ai
 
@@ -294,18 +357,20 @@ text = "\n".join(pytesseract.image_to_string(p, lang='pol') for p in pages)
    ```
    Agent powinien odpowiedzieć prośbą o dostarczenie pliku/treści.
 
-### Uwagi
+---
 
-- Skills działają wyłącznie w kontekście projektu, w którym zostały zainstalowane
-- Pliki DOCX są zapisywane w `/mnt/user-data/outputs/` i udostępniane przez Claude
+### Uwagi wspólne
+
+- Pliki DOCX generowane przez skills są zapisywane w `/mnt/user-data/outputs/` i udostępniane przez Claude
 - Zainstalowane skills nie wymagają ponownej konfiguracji przy każdej sesji
+- Pliki `.skill` to archiwa ZIP — nie rozpakowuj ich przed wgraniem
 
 ---
 
 ## Instalacja w Claude Code
 
 ### Wymagania
-- Claude Code (CLI) zainstalowany lokalnie
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) zainstalowany lokalnie (`npm install -g @anthropic-ai/claude-code`)
 - Node.js ≥ 18 lub Python ≥ 3.10 (dla skryptów pomocniczych)
 
 ### Kroki instalacji
@@ -315,31 +380,57 @@ text = "\n".join(pytesseract.image_to_string(p, lang='pol') for p in pages)
 git clone https://github.com/GSkuza/ai-polish-text-expert.git
 cd ai-polish-text-expert
 
-# 2. Przejdź do katalogu enterprise-plugin
-cd enterprise-plugin
+# 2. Zainstaluj zależności Python (dla przetwarzania PDF)
+pip install pdfplumber pytesseract pdf2image
 
-# 3. Zainstaluj zależności Python
-pip install pdfplumber pytesseract pdf2image --break-system-packages
-
-# 4. Zainstaluj zależności Node.js
+# 3. Zainstaluj zależności Node.js (dla generowania DOCX)
 npm install -g docx
 
-# 5. Sprawdź dostępność pandoc
+# 4. (Opcjonalnie) Sprawdź dostępność pandoc
 pandoc --version
-
-# 6. Zweryfikuj plugin
-claude code --list-plugins
 ```
 
-### Weryfikacja
+### Uruchomienie Claude Code
 
 ```bash
-# Sprawdź strukturę pluginu
-claude code --validate-plugin ./enterprise-plugin
-
-# Test komendy
-claude "uruchom /analiza-tresci na pliku test.txt" --plugin ./enterprise-plugin
+# Uruchom Claude Code w katalogu repozytorium
+cd ai-polish-text-expert
+claude
 ```
+
+Claude Code automatycznie odczyta:
+- **`CLAUDE.md`** — instrukcje projektowe (jeśli istnieje w katalogu głównym)
+- **`.mcp.json`** — definicje serwerów MCP w `enterprise-plugin/`
+- **`enterprise-plugin/agents/`** — dokumentację agentów jako kontekst
+
+### Praca z pluginem w Claude Code
+
+W sesji interaktywnej Claude Code możesz:
+
+```bash
+# Poproś o analizę pliku
+> Przeanalizuj plik enterprise-plugin/README.md pod kątem językowym
+
+# Poproś o porównanie dokumentów
+> Porównaj pliki doc1.txt i doc2.txt
+
+# Poproś o poprawę tekstu
+> Popraw tekst w pliku artykul.md — ma być w stylu formalnym
+
+# Załaduj kontekst agenta
+> @enterprise-plugin/agents/ai-polish-text-expert.md — użyj tego workflow do analizy
+```
+
+> **Uwaga:** W Claude Code nie używasz slash-komend (`/analiza-tresci`). Zamiast tego opisujesz zadanie naturalnym językiem, a Claude Code wykona odpowiednie operacje na plikach.
+
+### Różnice: Claude.ai vs Claude Code
+
+| Aspekt | Claude.ai | Claude Code |
+|--------|-----------|-------------|
+| Skills `.skill` | Wgrywasz przez UI | Nie dotyczy — używasz plików `.md` jako kontekst |
+| Komendy | `/analiza-tresci`, `/popraw-tresc` | Opisy naturalne: „przeanalizuj...", „popraw..." |
+| Output DOCX | `/mnt/user-data/outputs/` | Lokalny katalog projektu |
+| Praca z plikami | Załączasz w czacie | Agent czyta/zapisuje bezpośrednio |
 
 ### Konfiguracja hooks (opcjonalnie)
 
