@@ -50,17 +50,23 @@
 
 ```
 ai-polish-text-expert/
- └─ enterprise-plugin/
+ └─ ai-polish-text-expert-plugin/
+      ├─ .claude/
+      │    └─ commands/                 ← Komendy Claude Code (slash commands)
+      │         ├─ ai-polish-text-expert.md
+      │         ├─ analiza-tresci.md
+      │         ├─ popraw-tresc.md
+      │         └─ porownanie-tresci.md
       ├─ agents/
-      │    └─ ai-polish-text-expert.md   ← Agent orkiestrujący (ten plik)
+      │    └─ ai-polish-text-expert.md   ← Agent orkiestrujący (główny)
       ├─ skills/
       │    ├─ ai-polish-text-expert/     ← Skill główny (routing + wspólna logika)
       │    ├─ analiza-tresci/            ← Skill: analiza 1–5 dokumentów
       │    ├─ porownanie-tresci/         ← Skill: porównanie 2–3 dokumentów
       │    ├─ popraw-tresc/              ← Skill: refaktoryzacja i korekta
       │    └─ pdf-processor/             ← Skill pomocniczy: ekstrakcja z PDF
-      ├─ commands/                       ← Komendy CLI
-      ├─ hooks/                          ← Hook pre/post-commit
+      ├─ commands/                       ← Komendy CLI (status, logs)
+      ├─ hooks/                          ← Hooki pre/post-commit
       ├─ scripts/                        ← Narzędzia pomocnicze
       ├─ .claude-plugin/plugin.json      ← Manifest pluginu
       ├─ .mcp.json                       ← Definicje serwerów MCP
@@ -286,7 +292,7 @@ Skills zainstalowane tą metodą są dostępne **we wszystkich konwersacjach** n
 2. **Dodaj skill główny** (wymagany jako pierwszy):
    ```
    Kliknij  "Dodaj umiejętność"  →  "Wgraj plik .skill"
-   → Wybierz: enterprise-plugin/skills/ai-polish-text-expert/ai-polish-text-expert.skill
+   → Wybierz: ai-polish-text-expert-plugin/skills/ai-polish-text-expert/ai-polish-text-expert.skill
    → Potwierdź
    ```
 
@@ -340,15 +346,15 @@ Jeśli chcesz ograniczyć skills do konkretnego projektu:
 3. **Dodaj skill główny** (wymagany jako pierwszy):
    ```
    Kliknij "Dodaj umiejętność z pliku"
-   → Wybierz: enterprise-plugin/skills/ai-polish-text-expert/ai-polish-text-expert.skill
+   → Wybierz: ai-polish-text-expert-plugin/skills/ai-polish-text-expert/ai-polish-text-expert.skill
    → Potwierdź instalację
    ```
 
 4. **Dodaj pozostałe skills** (kolejność nie ma znaczenia):
    ```
-   enterprise-plugin/skills/analiza-tresci/analiza-tresci.skill
-   enterprise-plugin/skills/porownanie-tresci/porownanie-tresci.skill
-   enterprise-plugin/skills/popraw-tresc/popraw-tresc.skill
+   ai-polish-text-expert-plugin/skills/analiza-tresci/analiza-tresci.skill
+   ai-polish-text-expert-plugin/skills/porownanie-tresci/porownanie-tresci.skill
+   ai-polish-text-expert-plugin/skills/popraw-tresc/popraw-tresc.skill
    ```
 
 5. **Weryfikacja** — po instalacji w oknie czatu wpisz:
@@ -400,8 +406,9 @@ claude
 
 Claude Code automatycznie odczyta:
 - **`CLAUDE.md`** — instrukcje projektowe (jeśli istnieje w katalogu głównym)
-- **`.mcp.json`** — definicje serwerów MCP w `enterprise-plugin/`
-- **`enterprise-plugin/agents/`** — dokumentację agentów jako kontekst
+- **`.mcp.json`** — definicje serwerów MCP w `ai-polish-text-expert-plugin/`
+- **`ai-polish-text-expert-plugin/agents/`** — dokumentację agentów jako kontekst
+- **`ai-polish-text-expert-plugin/.claude/commands/`** — slash-komendy (`/analiza-tresci`, `/popraw-tresc`, `/porownanie-tresci`) dostępne bezpośrednio w Claude Code
 
 ### Praca z pluginem w Claude Code
 
@@ -409,7 +416,7 @@ W sesji interaktywnej Claude Code możesz:
 
 ```bash
 # Poproś o analizę pliku
-> Przeanalizuj plik enterprise-plugin/README.md pod kątem językowym
+> Przeanalizuj plik ai-polish-text-expert-plugin/README.md pod kątem językowym
 
 # Poproś o porównanie dokumentów
 > Porównaj pliki doc1.txt i doc2.txt
@@ -418,10 +425,10 @@ W sesji interaktywnej Claude Code możesz:
 > Popraw tekst w pliku artykul.md — ma być w stylu formalnym
 
 # Załaduj kontekst agenta
-> @enterprise-plugin/agents/ai-polish-text-expert.md — użyj tego workflow do analizy
+> @ai-polish-text-expert-plugin/agents/ai-polish-text-expert.md — użyj tego workflow do analizy
 ```
 
-> **Uwaga:** W Claude Code nie używasz slash-komend (`/analiza-tresci`). Zamiast tego opisujesz zadanie naturalnym językiem, a Claude Code wykona odpowiednie operacje na plikach.
+> **Wskazówka:** W Claude Code możesz używać slash-komend (`/analiza-tresci`, `/popraw-tresc`, `/porownanie-tresci`) zdefiniowanych w `.claude/commands/` — lub opisać zadanie naturalnym językiem, a Claude Code dobierze odpowiedni workflow.
 
 ### Różnice: Claude.ai vs Claude Code
 
@@ -438,7 +445,7 @@ Hooks pre-commit i pre-push są zdefiniowane w `hooks/hooks.json`. Aby je aktywo
 
 ```bash
 # Aktywuj hooks git
-cp enterprise-plugin/hooks/hooks.json .git/hooks/config.json
+cp ai-polish-text-expert-plugin/hooks/hooks.json .git/hooks/config.json
 ```
 
 ---
@@ -581,9 +588,16 @@ Agent:
 ```
 ai-polish-text-expert/
 │
-├── enterprise-plugin/                    # Katalog pluginu
+├── ai-polish-text-expert-plugin/                    # Katalog pluginu
 │   ├── .claude-plugin/
 │   │   └── plugin.json                   # Manifest pluginu (nazwa, wersja, ścieżki)
+│   │
+│   ├── .claude/
+│   │   └── commands/                     # Komendy slash dla Claude Code
+│   │       ├── ai-polish-text-expert.md  # Komenda: /ai-polish-text-expert
+│   │       ├── analiza-tresci.md         # Komenda: /analiza-tresci
+│   │       ├── popraw-tresc.md           # Komenda: /popraw-tresc
+│   │       └── porownanie-tresci.md      # Komenda: /porownanie-tresci
 │   │
 │   ├── agents/
 │   │   ├── ai-polish-text-expert.md      # ← Agent orkiestrujący (główny)
@@ -769,7 +783,7 @@ Wykryta próba injection → agent:
 
 Uruchomienie ręczne:
 ```bash
-bash enterprise-plugin/scripts/security-scan.sh --mode=full
+bash ai-polish-text-expert-plugin/scripts/security-scan.sh --mode=full
 ```
 
 ---
@@ -810,33 +824,33 @@ chore:    narzędzia, konfiguracja
 
 ```bash
 # Formatowanie
-python enterprise-plugin/scripts/format-code.py
+python ai-polish-text-expert-plugin/scripts/format-code.py
 
 # Bezpieczeństwo
-bash enterprise-plugin/scripts/security-scan.sh
+bash ai-polish-text-expert-plugin/scripts/security-scan.sh
 
 # Sprawdź błędy JSON w settings.json
-python -m json.tool enterprise-plugin/settings.json
+python -m json.tool ai-polish-text-expert-plugin/settings.json
 ```
 
 ### Dodawanie nowego skill'a
 
-1. Utwórz katalog: `enterprise-plugin/skills/<nazwa-skill>/`
+1. Utwórz katalog: `ai-polish-text-expert-plugin/skills/<nazwa-skill>/`
 2. Dodaj `SKILL.md` z opisem i workflow
 3. Zbuduj archiwum `.skill` (ZIP): `Compress-Archive skill/ skill.skill`
-4. Zarejestruj skill w `enterprise-plugin/.claude-plugin/plugin.json`
-5. Dodaj routing w `enterprise-plugin/agents/ai-polish-text-expert.md`
+4. Zarejestruj skill w `ai-polish-text-expert-plugin/.claude-plugin/plugin.json`
+5. Dodaj routing w `ai-polish-text-expert-plugin/agents/ai-polish-text-expert.md`
 6. Zaktualizuj `CHANGELOG.md`
 
 ---
 
 ## Changelog
 
-Pełna historia zmian: [enterprise-plugin/CHANGELOG.md](enterprise-plugin/CHANGELOG.md)
+Pełna historia zmian: [ai-polish-text-expert-plugin/CHANGELOG.md](ai-polish-text-expert-plugin/CHANGELOG.md)
 
 ### v1.0.0 (2026-03-06)
 
-- Inicjalna struktura enterprise-plugin
+- Inicjalna struktura ai-polish-text-expert-plugin
 - Agent orkiestrujący (`ai-polish-text-expert.md`) z pełnym workflow routingu
 - 4 skills: `ai-polish-text-expert`, `analiza-tresci`, `porownanie-tresci`, `popraw-tresc`
 - Skill pomocniczy `pdf-processor`
@@ -847,7 +861,7 @@ Pełna historia zmian: [enterprise-plugin/CHANGELOG.md](enterprise-plugin/CHANGE
 
 ## Licencja
 
-MIT — szczegóły w [enterprise-plugin/LICENSE](enterprise-plugin/LICENSE)
+MIT — szczegóły w [ai-polish-text-expert-plugin/LICENSE](ai-polish-text-expert-plugin/LICENSE)
 
 ```
 Copyright (c) 2026 GSkuza
