@@ -195,7 +195,22 @@ Każdy skill generuje raporty zgodnie ze wspólną konfiguracją:
 
 ## Integracja z Claude.ai
 
-Skill `ai-polish-text-expert` musi być zainstalowany w projekcie Claude.ai:
+Skills można zainstalować globalnie (customizacja konta) lub w ramach projektu.
+
+### Opcja A — Customizacja konta (globalne, zalecane)
+
+1. Otwórz **https://claude.ai/customize/skills** (lub: awatar → Ustawienia → Skills)
+2. Kliknij **Dodaj umiejętność** → **Wgraj plik .skill**
+3. Wgraj pliki w podanej kolejności:
+   - `skills/ai-polish-text-expert/ai-polish-text-expert.skill` ← **pierwszy**
+   - `skills/analiza-tresci/analiza-tresci.skill`
+   - `skills/porownanie-tresci/porownanie-tresci.skill`
+   - `skills/popraw-tresc/popraw-tresc.skill`
+4. Upewnij się, że przełączniki są **włączone** (zielone)
+
+Skills z customizacji działają w **każdej konwersacji** bez tworzenia projektu.
+
+### Opcja B — Ustawienia projektu
 
 1. Otwórz **Ustawienia projektu** → zakładka **Skills**
 2. Kliknij **Dodaj umiejętność z pliku**

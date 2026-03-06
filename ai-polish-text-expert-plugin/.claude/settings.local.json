@@ -1,0 +1,7 @@
+{
+  "enabledMcpjsonServers": [
+    "polish-text-server",
+    "pdf-processor-server"
+  ],
+  "enableAllProjectMcpServers": true
+}
