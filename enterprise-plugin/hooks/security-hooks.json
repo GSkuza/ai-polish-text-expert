@@ -1,0 +1,24 @@
+{
+  "hooks": {
+    "pre-commit": [
+      {
+        "name": "dependency-audit",
+        "command": "npm audit --audit-level=high",
+        "blocking": true
+      },
+      {
+        "name": "secret-scan",
+        "script": "./scripts/security-scan.sh --mode=secrets",
+        "blocking": true
+      }
+    ],
+    "pre-push": [
+      {
+        "name": "sast-scan",
+        "script": "./scripts/security-scan.sh --mode=sast",
+        "blocking": true,
+        "failOn": "critical"
+      }
+    ]
+  }
+}

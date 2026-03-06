@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "polish-text-server": {
+      "command": "node",
+      "args": ["./scripts/deploy.js", "--mode=mcp"],
+      "env": {
+        "NODE_ENV": "production",
+        "LOCALE": "pl-PL"
+      }
+    },
+    "pdf-processor-server": {
+      "command": "python",
+      "args": ["-m", "pdf_processor.server"],
+      "env": {
+        "PYTHONPATH": "./skills/pdf-processor/scripts"
+      }
+    }
+  }
+}

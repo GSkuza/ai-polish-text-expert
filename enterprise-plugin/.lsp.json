@@ -1,0 +1,29 @@
+{
+  "lspServers": {
+    "polish-language-server": {
+      "command": "polish-lsp",
+      "args": ["--stdio"],
+      "filetypes": ["markdown", "plaintext", "tex"],
+      "settings": {
+        "polish": {
+          "spellcheck": true,
+          "grammar": true,
+          "locale": "pl-PL"
+        }
+      }
+    },
+    "python": {
+      "command": "pylsp",
+      "args": [],
+      "filetypes": ["python"],
+      "settings": {
+        "pylsp": {
+          "plugins": {
+            "pyflakes": { "enabled": true },
+            "pylint": { "enabled": true }
+          }
+        }
+      }
+    }
+  }
+}

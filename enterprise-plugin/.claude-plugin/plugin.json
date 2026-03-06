@@ -1,0 +1,12 @@
+{
+  "name": "ai-polish-text-expert",
+  "version": "1.0.0",
+  "description": "Enterprise plugin for AI Polish Text Expert",
+  "author": "GSkuza",
+  "type": "enterprise-plugin",
+  "commands": "./commands",
+  "agents": "./agents",
+  "skills": "./skills",
+  "hooks": "./hooks/hooks.json",
+  "settings": "./settings.json"
+}

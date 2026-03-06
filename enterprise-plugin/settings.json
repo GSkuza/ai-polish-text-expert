@@ -1,0 +1,31 @@
+{
+  "plugin": {
+    "name": "ai-polish-text-expert",
+    "version": "1.0.0",
+    "locale": "pl-PL",
+    "timezone": "Europe/Warsaw"
+  },
+  "ai": {
+    "model": "gpt-4",
+    "temperature": 0.3,
+    "maxTokens": 4096,
+    "systemPrompt": "Jesteś ekspertem od języka polskiego. Pomagasz użytkownikom poprawiać i udoskonalać teksty w języku polskim."
+  },
+  "features": {
+    "spellCheck": true,
+    "grammarCheck": true,
+    "styleAnalysis": true,
+    "readabilityScore": true,
+    "plagiarismDetection": false
+  },
+  "output": {
+    "format": "markdown",
+    "includeExplanations": true,
+    "language": "pl"
+  },
+  "logging": {
+    "level": "info",
+    "maxFiles": 10,
+    "maxSize": "10m"
+  }
+}

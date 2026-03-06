@@ -1,0 +1,30 @@
+{
+  "hooks": {
+    "pre-commit": [
+      {
+        "name": "lint-check",
+        "script": "./scripts/format-code.py",
+        "blocking": true
+      },
+      {
+        "name": "security-scan",
+        "script": "./scripts/security-scan.sh",
+        "blocking": true
+      }
+    ],
+    "post-commit": [
+      {
+        "name": "notify-team",
+        "script": "./scripts/deploy.js",
+        "blocking": false
+      }
+    ],
+    "pre-push": [
+      {
+        "name": "run-tests",
+        "command": "npm test",
+        "blocking": true
+      }
+    ]
+  }
+}
