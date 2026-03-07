@@ -1,0 +1,5 @@
+# Claude Code local settings (contain machine-specific permissions)
+.claude/settings.local.json
+
+# Accidental Windows NUL file
+nul
