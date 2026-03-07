@@ -32,7 +32,7 @@
 
 | Tryb | Komenda | Co dostajesz |
 |------|---------|-------------|
-| Analiza treści | `/analiza-tresci` | Szczegółowy raport DOCX: 7 filarów analizy, encje, profil tonalny, czytelność, wnioski |
+| Analiza treści | `/analiza-tresci` | Szczegółowy raport DOCX: 8 filarów analizy z klasyfikacją gatunkową, wagami ocen, mapą problemów i rekomendacjami strategicznymi |
 | Porównanie dokumentów | `/porownanie-tresci` | Raport DOCX z matrycą podobieństw/różnic na 3 poziomach (merytoryczny, semantyczny, syntaktyczny) |
 | Poprawa tekstu | `/popraw-tresc` | DOCX z diagnostyką błędów, 3 wariantami stylu do wyboru i rejestrem wszystkich zmian |
 
@@ -136,26 +136,32 @@ polski-tekst/
 - Liczba plików: 1–5 jednocześnie
 - Jeden raport DOCX per materiał
 
-#### 7 filarów analizy
+#### Klasyfikacja gatunkowa
+
+Przed analizą skill identyfikuje gatunek materiału (raport, artykuł, marketing, dokumentacja techniczna, tekst prawny, materiał edukacyjny, transkrypt, korespondencja, social media, tekst naukowy) i dobiera wagi ocen do jego specyfiki.
+
+#### 8 filarów analizy
 
 | Filar | Opis |
 |-------|------|
-| **Struktura i logika** | Schemat argumentacji, spójność, luki |
-| **Merytoryczność** | Kompletność, trafność, luki tematyczne |
-| **Encje i fakty** | Osoby, miejsca, daty, kwoty, instytucje |
-| **Profil tonalny** | Formalność, emocjonalność, narracja |
-| **Czytelność (WZT)** | Wskaźnik Zawiłości Tekstu, trudność |
-| **Słownictwo** | Różnorodność leksykalna, powtórzenia |
-| **Wnioski i rekomendacje** | Priorytety [P1/P2/P3], działania naprawcze |
+| **1. Identyfikacja i kontekst** | Temat, intencja, odbiorcy, mapa pojęć kluczowych |
+| **2. Architektura strukturalna** | Makro- i mikrostruktura, progresja tematyczna, konektory, łańcuchy anaforyczne |
+| **3. Jakość argumentacji** | Mapa argumentów, błędy logiczne, ocena jakości dowodów |
+| **4. Warstwa językowa** | Poprawność normatywna, styl/rejestr, metryki czytelności (FOG, SLD, strona bierna) |
+| **5. Analiza retoryczna** | Ethos/logos/pathos, techniki retoryczne, ton emocjonalny |
+| **6. Ocena punktowa** | 8 kryteriów z wagami gatunkowymi → wynik 1–10, werdykt ✅ / ⚠️ / ❌ |
+| **7. Mapa problemów** | Tabela [P1]/[P2]/[P3] z lokalizacją, typem i działaniem naprawczym |
+| **8. Podsumowanie eksperckie** | Diagnoza, mocne strony, ryzyka, rekomendacje (Natychmiast / Następna iteracja / Perspektywicznie) |
 
 #### Workflow
 ```
 KROK 0: Bezpieczeństwo (prompt injection)
-KROK 1: Przyjęcie plików i identyfikacja formatu
-KROK 2: Ekstrakcja tekstu
-KROK 3: Analiza każdego materiału (7 filarów)
-KROK 4: Generacja raportu DOCX per materiał
-KROK 5: Dostarczenie pliku + podsumowanie
+KROK 1: Ekstrakcja treści (PDF/DOCX/TXT/MD/JSON)
+KROK 2: Potwierdzenie listy materiałów z użytkownikiem
+KROK 3: Analiza każdego materiału osobno (klasyfikacja gatunkowa + 8 filarów)
+KROK 4: Weryfikacja faktów przed publikacją raportu
+KROK 5: Generacja raportu DOCX per materiał (font Aptos, tabele z wagami)
+KROK 6: Walidacja DOCX + dostarczenie pliku + podsumowanie
 ```
 
 ---
@@ -847,6 +853,18 @@ python -m json.tool ai-polish-text-expert-plugin/settings.json
 ## Changelog
 
 Pełna historia zmian: [ai-polish-text-expert-plugin/CHANGELOG.md](ai-polish-text-expert-plugin/CHANGELOG.md)
+
+### v1.0.1 (2026-03-07)
+
+- `analiza-tresci`: rozbudowa z 7 do **8 filarów analizy eksperckiej**
+- Dodano klasyfikację gatunkową materiału z 10 typami (raport, marketing, prawo, nauka…)
+- Dodano tabele wag gatunkowych dla oceny punktowej (każdy gatunek ma inne wagi kryteriów)
+- Rozszerzono Filar 2 o analizę mikrostruktury (progresja tematyczna, konektory, łańcuchy anaforyczne)
+- Nowy Filar 3: szczegółowa mapa błędów logicznych (10 typów) + tabela jakości dowodów
+- Nowy Filar 4: metryki czytelności (FOG, SLD, gęstość terminologiczna, odsetek strony biernej)
+- Nowy Filar 5: analiza retoryczna (ethos/logos/pathos, techniki retoryczne, mapa tonu)
+- Krok 4: weryfikacja wiedzy przed publikacją raportu
+- Zaktualizowano `.claude/commands/analiza-tresci.md` i `analiza-tresci.skill`
 
 ### v1.0.0 (2026-03-06)
 
