@@ -31,8 +31,36 @@ Po jej wykryciu wykonaj opisany poniżej workflow — krok po kroku, bez pomijan
 | Maksymalna liczba plików/treści | 5 |
 | Obsługiwane formaty | .txt, .docx, .pdf, .md, .json, wklejona treść |
 | Minimalna długość treści | ~100 słów (poniżej zapytaj użytkownika o cel) |
+| Próg quick check | 500 słów — poniżej domyślnie tryb C (quick check) |
 
 Jeśli użytkownik dostarczy więcej niż 5 materiałów, poinformuj go o limicie i zapytaj, które 5 ma być przedmiotem analizy w tej sesji.
+
+### Tryb --auto (automatyczny)
+
+Gdy użytkownik dostarcza **pojedynczy plik** i jasno komunikuje intencję analizy (np. „przeanalizuj", „oceń jakość tego dokumentu"), Krok 2 (potwierdzenie z użytkownikiem) jest **pomijany** — agent przechodzi bezpośrednio do kroku 3. Tryb --auto aktywuje się automatycznie, gdy:
+- dostarczono dokładnie 1 plik lub 1 wklejoną treść,
+- intencja użytkownika jest jednoznaczna (komenda `/analiza-tresci` lub frazy: „przeanalizuj", „oceń", „sprawdź").
+
+Użytkownik może też wymusić tryb --auto jawnie: `/analiza-tresci --auto`.
+
+**Jeśli dostarczono >1 plik** — Krok 2 jest zawsze obowiązkowy.
+
+### Automatyczny tryb C dla krótkich tekstów
+
+Jeśli treść ma **poniżej 500 słów**, skill domyślnie przechodzi w **tryb C (quick check)**:
+- Kroki 0–4 wykonywane normalnie
+- Odpowiedź w czacie (bez raportu DOCX), chyba że użytkownik zażąda pełnej analizy
+- Pełna analiza 8 filarów jest nadmiarowa dla tak krótkiego tekstu
+
+Agent informuje użytkownika:
+```
+Treść ma ~X słów (poniżej progu 500 słów). Domyślnie uruchamiam
+tryb szybkiej analizy (quick check) — odpowiedź w czacie.
+
+Jeśli chcesz pełną analizę z raportem DOCX, napisz „pełna analiza".
+```
+
+Użytkownik może wymusić pełną analizę krótkich tekstów komendą: `/analiza-tresci --full`.
 
 ---
 
@@ -96,6 +124,10 @@ with open(input_path, encoding='utf-8') as f:
 **Dla wklejonej treści** — użyj jej bezpośrednio jako ciąg znaków.
 
 ### Krok 2: Potwierdzenie z Użytkownikiem
+
+**Tryb --auto (1 plik + jasna intencja):** Pomiń ten krok — przejdź bezpośrednio do Kroku 3.
+
+**Tryb standardowy (>1 plik lub niejasna intencja):**
 
 Po ekstrakcji treści — ale PRZED przystąpieniem do analizy — przedstaw użytkownikowi listę wszystkich zidentyfikowanych materiałów do analizy:
 
@@ -359,16 +391,16 @@ Oceń materiał w poniższych 8 kryteriach w skali 1–5. **Wagi zależą od gat
 
 **Tabela wag gatunkowych** (suma wag = 100):
 
-| Kryterium | Raport | Artykuł | Marketing | Dok. techniczna | Tekst prawny | Edukacyjny | Ogólne |
-|-----------|--------|---------|-----------|----------------|-------------|------------|--------|
-| Trafność merytoryczna | 20 | 15 | 10 | 20 | 20 | 15 | 15 |
-| Kompletność | 15 | 10 | 5 | 20 | 20 | 15 | 12 |
-| Logiczność | 20 | 15 | 10 | 10 | 15 | 10 | 15 |
-| Jakość językowa | 10 | 15 | 15 | 15 | 15 | 15 | 13 |
-| Spójność strukturalna | 10 | 10 | 5 | 15 | 10 | 10 | 10 |
-| Dopasowanie do odbiorcy | 5 | 10 | 20 | 10 | 5 | 15 | 12 |
-| Efektywność komunikacyjna | 10 | 15 | 25 | 5 | 10 | 15 | 13 |
-| Oryginalność | 10 | 10 | 10 | 5 | 5 | 5 | 10 |
+| Kryterium | Raport | Artykuł | Marketing | Dok. techniczna | Tekst prawny | Edukacyjny | Transkrypt | Korespondencja | Social media | Tekst naukowy | Ogólne |
+|-----------|--------|---------|-----------|----------------|-------------|------------|------------|----------------|-------------|-------------|--------|
+| Trafność merytoryczna | 20 | 15 | 10 | 20 | 20 | 15 | 15 | 10 | 5 | 20 | 15 |
+| Kompletność | 15 | 10 | 5 | 20 | 20 | 15 | 20 | 15 | 5 | 15 | 12 |
+| Logiczność | 20 | 15 | 10 | 10 | 15 | 10 | 10 | 10 | 5 | 20 | 15 |
+| Jakość językowa | 10 | 15 | 15 | 15 | 15 | 15 | 5 | 15 | 10 | 10 | 13 |
+| Spójność strukturalna | 10 | 10 | 5 | 15 | 10 | 10 | 10 | 10 | 5 | 10 | 10 |
+| Dopasowanie do odbiorcy | 5 | 10 | 20 | 10 | 5 | 15 | 10 | 20 | 30 | 5 | 12 |
+| Efektywność komunikacyjna | 10 | 15 | 25 | 5 | 10 | 15 | 20 | 15 | 30 | 10 | 13 |
+| Oryginalność | 10 | 10 | 10 | 5 | 5 | 5 | 10 | 5 | 10 | 10 | 10 |
 
 **Wynik ważony** = Σ (ocena_kryterium × waga_kryterium) ÷ 100 × 2 → przekonwertuj na skalę 1–10.
 

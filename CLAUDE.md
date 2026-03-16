@@ -34,6 +34,12 @@ Gdy użytkownik chce pracować z tekstem po polsku, stosuj workflow z:
 | "porównaj", "różnice między", "co wspólnego" | `/porownanie-tresci` |
 | "popraw", "redaguj", "ulepsz", "korekta" | `/popraw-tresc` |
 
+### Disambiguacja (frazy wieloznaczne)
+
+Gdy fraza pasuje do >1 skilla (np. „sprawdź mi ten dokument"), agent **pyta o cel** zamiast defaultować:
+- „Chcesz raport analityczny czy poprawiony tekst?"
+- „Porównanie dokumentów czy osobna analiza każdego?"
+
 ### Gdy intencja niejasna — wyświetl menu:
 
 ```
@@ -94,6 +100,10 @@ ai-polish-text-expert-plugin/
 ├── .claude/commands/          ← Slash commands dla Claude Code
 ├── agents/                    ← Dokumentacja agentów
 ├── skills/                    ← Pliki .skill (dla Claude.ai)
+├── shared/                    ← Jedno źródło prawdy (kolory, odznaki, fonty)
+│   ├── badges.json            ← Odznaki statusu
+│   └── theme.json             ← Paleta kolorów i fontów
+├── tests/                     ← Przypadki testowe dla skills
 ├── hooks/                     ← Hooki pre/post-commit
 ├── scripts/                   ← Narzędzia pomocnicze
 └── settings.json              ← Konfiguracja

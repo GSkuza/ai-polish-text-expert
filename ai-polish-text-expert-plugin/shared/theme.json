@@ -1,0 +1,40 @@
+{
+  "_comment": "Jedno źródło prawdy dla palety kolorów i fontów używanych we wszystkich raportach DOCX.",
+  "fonts": {
+    "primary": "Aptos",
+    "fallback": "Calibri",
+    "sizeDefault": 11,
+    "sizeH1": 16,
+    "sizeH2": 13,
+    "sizeH3": 11,
+    "sizeFooter": 8,
+    "sizeBadge": 10
+  },
+  "colors": {
+    "headingH1":      "#1F4E79",
+    "headingH2":      "#2E75B6",
+    "headingH3":      "#404040",
+    "tableHeaderBg":  "#1F4E79",
+    "tableHeaderText": "#FFFFFF",
+    "tableRowEven":   "#EAF2FA",
+    "tableRowOdd":    "#FFFFFF",
+    "tableBorder":    "#CCCCCC",
+    "metaText":       "#888888",
+    "bodyText":       "#333333"
+  },
+  "page": {
+    "format": "A4",
+    "widthDXA": 11906,
+    "heightDXA": 16838,
+    "marginTopDXA": 1440,
+    "marginBottomDXA": 1440,
+    "marginLeftDXA": 1440,
+    "marginRightDXA": 1440
+  },
+  "report": {
+    "outputDir": "/mnt/user-data/outputs/",
+    "pageNumbers": true,
+    "headerFormat": "{MODE} — DOKUMENT ROBOCZY",
+    "footerFormat": "Data: {DATE}  |  Strona {PAGE}"
+  }
+}

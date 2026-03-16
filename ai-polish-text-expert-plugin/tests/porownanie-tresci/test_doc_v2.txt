@@ -1,0 +1,21 @@
+Raport z realizacji projektu wdrożenia systemu CRM — aktualizacja
+
+1. Wprowadzenie
+
+Niniejszy raport przedstawia aktualny postęp prac nad wdrożeniem systemu CRM w firmie ABC Sp. z o.o. Projekt rozpoczął się 15 marca 2025 roku. Ze względu na zidentyfikowane opóźnienia, nowy termin zakończenia to 31 października 2025 roku.
+
+2. Status realizacji
+
+Na dzień 1 września 2025 roku zrealizowano 85% zaplanowanych zadań. Moduł zarządzania kontaktami jest w pełni operacyjny od 15 maja. Moduł raportowania przeszedł testy z wynikiem pozytywnym i został wdrożony produkcyjnie. Integracja z systemem ERP została ukończona 20 sierpnia.
+
+3. Ryzyka
+
+Główne ryzyko dotyczące licencji zostało częściowo zażegnane — dostawca dostarczył 80% wymaganych licencji. Pozostałe 20% oczekujemy do 15 września. Nowym ryzykiem jest konieczność dodatkowego szkolenia użytkowników końcowych.
+
+4. Budżet
+
+Projekt przekroczył budżet o 12% ze względu na dodatkowe prace integracyjne i zwiększenie zespołu. Całkowity koszt: 450 000 PLN (planowano: 400 000 PLN).
+
+5. Rekomendacje
+
+Zalecamy przeprowadzenie szkolenia dla użytkowników końcowych w październiku oraz przygotowanie planu utrzymania systemu na rok 2026.

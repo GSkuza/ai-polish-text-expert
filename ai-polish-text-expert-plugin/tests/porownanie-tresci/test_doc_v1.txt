@@ -1,0 +1,17 @@
+Raport z realizacji projektu wdrożenia systemu CRM
+
+1. Wprowadzenie
+
+Niniejszy raport przedstawia postęp prac nad wdrożeniem systemu CRM w firmie ABC Sp. z o.o. Projekt rozpoczął się 15 marca 2025 roku i zgodnie z harmonogramem powinien zakończyć się 30 września 2025 roku.
+
+2. Status realizacji
+
+Na dzień 1 lipca 2025 roku zrealizowano 65% zaplanowanych zadań. Moduł zarządzania kontaktami jest w pełni operacyjny. Moduł raportowania znajduje się w fazie testów. Integracja z systemem ERP wymaga dodatkowych prac, które szacujemy na 3 tygodnie.
+
+3. Ryzyka
+
+Głównym ryzykiem jest opóźnienie dostawy licencji od dostawcy zewnętrznego. Brak licencji może spowodować przesunięcie terminu zakończenia o 2–4 tygodnie.
+
+4. Rekomendacje
+
+Zalecamy przyspieszenie negocjacji z dostawcą licencji oraz zwiększenie zespołu integracyjnego o 2 osoby.

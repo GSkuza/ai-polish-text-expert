@@ -1,0 +1,13 @@
+{
+  "_comment": "Jedno źródło prawdy dla odznak statusu używanych we wszystkich skillach i raportach DOCX.",
+  "badges": {
+    "OK":  { "text": "[OK]",  "color": "#00B050", "description": "Pozytywny wynik" },
+    "WARN": { "text": "[!]",   "color": "#FF8C00", "description": "Ostrzeżenie" },
+    "ERR":  { "text": "[X]",   "color": "#C00000", "description": "Błąd / Problem" },
+    "INFO": { "text": "[i]",   "color": "#2E75B6", "description": "Informacja dodatkowa" },
+    "P1":   { "text": "[P1]",  "color": "#C00000", "description": "Priorytet wysoki" },
+    "P2":   { "text": "[P2]",  "color": "#FF8C00", "description": "Priorytet średni" },
+    "P3":   { "text": "[P3]",  "color": "#00B050", "description": "Priorytet niski" },
+    "PLUS": { "text": "[+]",   "color": "#00B050", "description": "Wyróżnienie pozytywne" }
+  }
+}

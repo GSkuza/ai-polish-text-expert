@@ -32,9 +32,9 @@
 
 | Tryb | Komenda | Co dostajesz |
 |------|---------|-------------|
-| Analiza treści | `/analiza-tresci` | Szczegółowy raport DOCX: 8 filarów analizy z klasyfikacją gatunkową, wagami ocen, mapą problemów i rekomendacjami strategicznymi |
-| Porównanie dokumentów | `/porownanie-tresci` | Raport DOCX z matrycą podobieństw/różnic na 3 poziomach (merytoryczny, semantyczny, syntaktyczny) |
-| Poprawa tekstu | `/popraw-tresc` | DOCX z diagnostyką błędów, 3 wariantami stylu do wyboru i rejestrem wszystkich zmian |
+| Analiza treści | `/analiza-tresci` | Szczegółowy raport DOCX: 8 filarów analizy z klasyfikacją gatunkową, wagami ocen, mapą problemów i rekomendacjami strategicznymi. Tryb `--auto` pomija potwierdzenie dla 1 pliku; quick check dla tekstów <500 słów |
+| Porównanie dokumentów | `/porownanie-tresci` | Raport DOCX z matrycą podobieństw/różnic na 3 poziomach (merytoryczny, semantyczny, syntaktyczny). Tryb `--redline` dla wizualnego diffu wersji dokumentu |
+| Poprawa tekstu | `/popraw-tresc` | DOCX z diagnostyką błędów, 3 wariantami stylu do wyboru i rejestrem wszystkich zmian. Tryb `--preserve-format` zachowuje formatowanie DOCX |
 
 ### Dlaczego ten plugin?
 
@@ -42,7 +42,10 @@
 - **Pełny workflow** — agent nie skraca kroków, pyta gdy czegoś brakuje
 - **Bezpieczeństwo** — skanowanie prompt injection przed każdym działaniem
 - **Fakty z treści** — agent nie dodaje wiedzy własnej bez wyraźnego oznaczenia `[i] DO WERYFIKACJI`
-- **Etapowość** — dłuższe teksty są dzielone na etapy, by zachować spójność stylu
+- **Etapowość** — dłuższe teksty dzielone automatycznie na etapy (do 15 000 znaków), by zachować spójność stylu
+- **Disambiguacja intencji** — agent pyta o cel gdy fraza pasuje do >1 skilla, zamiast domyślnie wybierać
+- **Shared config** — jedno źródło prawdy dla kolorów, fontów i odznak (`shared/`)
+- **Testy** — folder `tests/` z przypadkami testowymi dla każdego skilla
 
 ---
 
@@ -61,10 +64,14 @@ ai-polish-text-expert/
       │    └─ ai-polish-text-expert.md   ← Agent orkiestrujący (główny)
       ├─ skills/
       │    ├─ ai-polish-text-expert/     ← Skill główny (routing + wspólna logika)
-      │    ├─ analiza-tresci/            ← Skill: analiza 1–5 dokumentów
-      │    ├─ porownanie-tresci/         ← Skill: porównanie 2–3 dokumentów
-      │    ├─ popraw-tresc/              ← Skill: refaktoryzacja i korekta
+      │    ├─ analiza-tresci/            ← Skill: analiza 1–5 dokumentów (--auto, quick check)
+      │    ├─ porownanie-tresci/         ← Skill: porównanie 2–3 dokumentów (--redline)
+      │    ├─ popraw-tresc/              ← Skill: refaktoryzacja i korekta (--preserve-format)
       │    └─ pdf-processor/             ← Skill pomocniczy: ekstrakcja z PDF
+      ├─ shared/
+      │    ├─ badges.json                ← Odznaki statusu (jedno źródło prawdy)
+      │    └─ theme.json                 ← Kolory, fonty, konfiguracja strony
+      ├─ tests/                          ← Przypadki testowe dla skills
       ├─ commands/                       ← Komendy CLI (status, logs)
       ├─ hooks/                          ← Hooki pre/post-commit
       ├─ scripts/                        ← Narzędzia pomocnicze
@@ -136,6 +143,14 @@ polski-tekst/
 - Liczba plików: 1–5 jednocześnie
 - Jeden raport DOCX per materiał
 
+#### Tryb automatyczny (`--auto`)
+
+`/analiza-tresci --auto` — pomija krok potwierdzenia listy materiałów (krok 2) gdy wgrany jest tylko jeden plik. Przydatne do szybkich analiz bez interakcji.
+
+#### Quick Check (< 500 słów)
+
+Teksty poniżej 500 słów automatycznie otrzymują uproszczoną analizę (tryb C) — skrócone filary z najważniejszymi obserwacjami, bez pełnej matrycy argumentacji.
+
 #### Klasyfikacja gatunkowa
 
 Przed analizą skill identyfikuje gatunek materiału (raport, artykuł, marketing, dokumentacja techniczna, tekst prawny, materiał edukacyjny, transkrypt, korespondencja, social media, tekst naukowy) i dobiera wagi ocen do jego specyfiki.
@@ -157,8 +172,8 @@ Przed analizą skill identyfikuje gatunek materiału (raport, artykuł, marketin
 ```
 KROK 0: Bezpieczeństwo (prompt injection)
 KROK 1: Ekstrakcja treści (PDF/DOCX/TXT/MD/JSON)
-KROK 2: Potwierdzenie listy materiałów z użytkownikiem
-KROK 3: Analiza każdego materiału osobno (klasyfikacja gatunkowa + 8 filarów)
+KROK 2: Potwierdzenie listy materiałów z użytkownikiem (pomijany w --auto dla 1 pliku)
+KROK 3: Analiza każdego materiału osobno (klasyfikacja gatunkowa + 8 filarów; < 500 słów → tryb C)
 KROK 4: Weryfikacja faktów przed publikacją raportu
 KROK 5: Generacja raportu DOCX per materiał (font Aptos, tabele z wagami)
 KROK 6: Walidacja DOCX + dostarczenie pliku + podsumowanie
@@ -186,7 +201,16 @@ KROK 6: Walidacja DOCX + dostarczenie pliku + podsumowanie
 
 #### Matryca zgodności
 
-Raport zawiera macierz N×N pokazującą procentowe podobieństwo każdej pary dokumentów na każdej warstwie analizy.
+Raport zawiera macierz N×N pokazującą procentowe podobieństwo każdej pary dokumentów na każdej warstwie analizy. Metodologia obliczania procentów jest opisana transparentnie w raporcie (heurystyka oparta na liczbie wspólnych twierdzeń, pól semantycznych i metryk stylistycznych).
+
+#### Tryb Redline (`--redline`)
+
+Porównanie wizualne dwóch wersji tego samego dokumentu z oznaczonymi zmianami:
+- **Dodane** — tekst zielony, pogrubiony, podkreślony
+- **Usunięte** — tekst czerwony, przekreślony
+- **Zmienione** — tekst pomarańczowy z tłem
+
+Aktywacja: `/porownanie-tresci --redline` lub automatyczna sugestia gdy >70% wspólnej treści.
 
 #### Workflow
 ```
@@ -210,7 +234,8 @@ KROK 7: Dostarczenie pliku + podsumowanie
 #### Wejście
 - Formaty: `.txt`, `.docx`, `.pdf`, wklejona treść
 - **Jeden plik / jedna treść** na raz
-- Limit: **10 000 znaków ze spacjami** na etap (dłuższe teksty → podział etapowy)
+- Limit: **15 000 znaków ze spacjami** na etap (dłuższe teksty → automatyczny podział)
+- Tryb `--preserve-format`: zachowuje formatowanie DOCX (tabele, nagłówki, obrazki) — edycja in-place zamiast przepisania
 
 #### Pipeline
 
