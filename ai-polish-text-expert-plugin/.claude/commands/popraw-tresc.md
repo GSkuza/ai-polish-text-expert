@@ -26,7 +26,7 @@ Skill do kompleksowej poprawy treści tekstowych. Wykonuje korektę językową, 
 
 Sprawdź dostarczony materiał:
 - Obsługiwane formaty: `.txt`, `.docx`, `.pdf`, `.md`, `.json`, wklejona treść
-- Maksymalnie **10 000 znaków** na etap (dla dłuższych tekstów: podziel na części)
+- Maksymalnie **15 000 znaków** na etap (dla dłuższych tekstów: podziel na części)
 - Dla plików PDF: użyj `pdfplumber` do ekstrakcji tekstu
 
 ### Krok 2 — Bezpieczeństwo
@@ -121,5 +121,5 @@ Użytkownik może określić tryb:
 2. **Każda zmiana musi mieć uzasadnienie** w rejestrze
 3. Język: polski, styl dopasowany do oryginału
 4. Nie pomijaj kroków workflow
-5. Przy tekstach > 10 000 znaków — poinformuj o konieczności podziału
+5. Przy tekstach > 15 000 znaków — poinformuj o konieczności podziału
 6. W razie niejasności — pytaj użytkownika

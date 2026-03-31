@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **plugin.json**: wersja zaktualizowana z `1.0.0` do `1.1.0` — spójność z `settings.json` i `CHANGELOG.md`
+- **popraw-tresc** (komendy): limit znaków zaktualizowany z 10 000 do 15 000 na etap w obu lokalizacjach (`.claude/commands/` i `ai-polish-text-expert-plugin/.claude/commands/`)
+- **analiza-tresci** (root `.claude/commands/`): zsynchronizowana z pełną wersją 764 wierszy z `ai-polish-text-expert-plugin/.claude/commands/` (zastąpiono uproszczoną wersję 90-wierszową)
+
+### Added
+- **tests/analiza-tresci/test_long_text.txt**: brakujący plik testowy dla tekstów >3000 słów (wyzwala przetwarzanie partiami)
+- **tests/popraw-tresc/test_long_15k.txt**: brakujący plik testowy dla tekstów >15 000 znaków (wyzwala automatyczny podział na etapy)
+- **legal-tech/README.md**: dokumentacja katalogu `legal-tech/` — opis skilla Szukaj Orzeczeń, instalacja, przykłady użycia, powiązanie z pluginem
+- **.gitignore**: rozszerzony o popularne artefakty Python (`.venv/`, `__pycache__/`, `*.pyc`), Node.js (`node_modules/`), systemy operacyjne (`.DS_Store`) i katalogi wyjściowe
+
 ---
 
 ## [1.1.0] - 2026-03-16
