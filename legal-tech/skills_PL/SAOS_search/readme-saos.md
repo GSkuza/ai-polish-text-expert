@@ -2,7 +2,9 @@
 ## Ważne
 
 Przed uruchomieniem wejdż w: https://claude.ai/settings/capabilities i w "additional allowed domains" dodaj koniecznie:
+
 a) saos.org.pl
+
 b) www.saos.org.pl
 
 ## Overview
